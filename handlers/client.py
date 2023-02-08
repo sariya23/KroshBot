@@ -2,6 +2,7 @@ from aiogram import types, Dispatcher
 from create_bot import bot
 from keyboards.client_kb import client_keyboard_start
 from keyboards.client_kb import client_keyboard_commands
+from keyboards.client_kb import client_keyboard_breeds
 from aiogram.dispatcher.filters import Text
 
 
@@ -14,7 +15,7 @@ async def empty(message: types.Message):
 
 
 async def show_commands(callback: types.CallbackQuery):
-    """Show inline keyboard command"""
+    """Send inline keayboard command"""
     await bot.send_message(callback.from_user.id, 'Вот что я умею', reply_markup=client_keyboard_commands)
     await callback.answer()
 
@@ -33,10 +34,17 @@ async def send_phone_number(callback: types.CallbackQuery):
     await callback.answer()
 
 
-async def send_email(callback: types.CallbackQuery):
-    """Send email"""
+async def send_email_address(callback: types.CallbackQuery):
+    """Send email address"""
     await bot.send_message(callback.from_user.id, 'Пиши сюда:\ntsarskiy_krolik@mail.ru')
     await callback.answer()
+
+
+async def show_catalog(callback: types.CallbackQuery):
+    """Send inline keyboard with breeds of the rabbits"""
+    await bot.send_message(callback.from_user.id,
+                           'Нас много, но все мы разные',
+                           reply_markup=client_keyboard_breeds)
 
 
 def register_handlers_client(dp: Dispatcher):
@@ -44,5 +52,6 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_callback_query_handler(show_commands, Text(startswith=('show')))
     dp.register_callback_query_handler(send_address_shop, Text(startswith=('location')))
     dp.register_callback_query_handler(send_phone_number, Text(startswith=('phone_number')))
-    dp.register_callback_query_handler(send_email, Text(startswith=('email')))
+    dp.register_callback_query_handler(send_email_address, Text(startswith=('email')))
+    dp.register_callback_query_handler(show_catalog, Text(startswith=('catalog')))
     dp.register_message_handler(empty)
