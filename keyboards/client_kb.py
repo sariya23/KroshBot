@@ -9,6 +9,7 @@ client_keyboard_start.add(button_show_commands)
 # Commands
 button_location = InlineKeyboardButton('Локация остальных кроликов', callback_data='location')
 button_phone_number = InlineKeyboardButton('Номер телефона', callback_data='phone_number')
+button_email = InlineKeyboardButton('Электронная почта', callback_data='email')
 
 client_keyboard_commands = InlineKeyboardMarkup(row_width=1)
-client_keyboard_commands.add(button_location, button_phone_number)
+client_keyboard_commands.add(button_location, button_phone_number, button_email)

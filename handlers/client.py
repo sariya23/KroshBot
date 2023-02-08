@@ -30,11 +30,17 @@ async def send_phone_number(callback: types.CallbackQuery):
     await bot.send_message(callback.from_user.id, 'Звони сюда:\n'
                                                   '+79252215934')
     await callback.answer()
-    
+
+
+async def send_email(callback: types.CallbackQuery):
+    await bot.send_message(callback.from_user.id, 'Пиши сюда:\ntsarskiy_krolik@mail.ru')
+    await callback.answer()
+
 
 def register_handlers_client(dp: Dispatcher):
     """The function registers handlers"""
     dp.register_callback_query_handler(show_commands, Text(startswith=('show')))
     dp.register_callback_query_handler(send_address_shop, Text(startswith=('location')))
     dp.register_callback_query_handler(send_phone_number, Text(startswith=('phone_number')))
+    dp.register_callback_query_handler(send_email, Text(startswith=('email')))
     dp.register_message_handler(empty)
