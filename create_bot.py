@@ -1,5 +1,6 @@
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
+from info_bot import TOKEN
 
 
 bot = Bot(token=TOKEN)

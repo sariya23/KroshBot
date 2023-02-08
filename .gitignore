@@ -1,3 +1,4 @@
 .idea
 venv
 info_bot.py
+__pycache__/
