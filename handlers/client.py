@@ -10,7 +10,9 @@ from Parser_class import Parser
 
 
 current_keyboard_level = 0
-#
+
+STACK = []
+
 KEYBOARD_LEVELS = {
     0: (client_keyboard_start, 'Я кролик-бот. Меня зовут Крош. Я реагирую только на определенные команды, прям как настоящий кролик'),
     1: (client_keyboard_commands, 'Вот что я умею'),
@@ -41,7 +43,9 @@ async def show_commands(callback: types.CallbackQuery):
     """Send inline keyboard command"""
     global current_keyboard_level
     current_keyboard_level = 1
-
+    
+    STACK.append(callback.message)
+    
     await bot.send_message(callback.from_user.id, 'Вот что я умею', reply_markup=client_keyboard_commands)
     await callback.answer()
 
@@ -71,9 +75,12 @@ async def show_catalog(callback: types.CallbackQuery):
     global current_keyboard_level
     current_keyboard_level = 2
 
+    STACK.append(callback.message)
+
     await bot.send_message(callback.from_user.id,
                            'Нас много, но все мы разные',
                            reply_markup=client_keyboard_breeds)
+    await callback.answer()
 
 
 async def show_picked_breed(callback: types.CallbackQuery):
@@ -103,7 +110,7 @@ async def show_picked_breed(callback: types.CallbackQuery):
 
 async def back(callback: types.CallbackQuery):
     """Send prev. inline keyboard"""
-
+    await STACK[-1].delete()
     await bot.send_message(callback.from_user.id, KEYBOARD_LEVELS[current_keyboard_level - 1][1], reply_markup=KEYBOARD_LEVELS[current_keyboard_level - 1][0])
 
 
