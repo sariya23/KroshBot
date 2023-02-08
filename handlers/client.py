@@ -16,11 +16,17 @@ KEYBOARD_LEVELS = {
     1: (client_keyboard_commands, 'Вот что я умею'),
     2: (client_keyboard_breeds, 'Нас много, но все мы разные')
 }
-#
-# KEYBOARD_LEVELS = {
-#     0: empty,
-#
-# }
+
+english_to_russian = {
+    'belichij': 'Беличий карлик',
+    'germelin': 'Гермелин',
+    'karlikovyj-baran': 'Карликовый барон',
+    'minor': 'Менор',
+    'minilop': 'МиниЛоп',
+    'niderlandskij': 'Нидерландский',
+    'xotot': 'Хотот',
+    'cvetnoj-karlik': 'Цветной карлик'
+}
 
 
 async def empty(message: types.Message):
@@ -90,13 +96,14 @@ async def show_picked_breed(callback: types.CallbackQuery):
                                  parse_mode='html')
     await callback.answer()
     await bot.send_message(callback.from_user.id,
-                           f'Это большинство кроликов породы {callback.data.split()[1]}.'
+                           f'Это большинство кроликов породы {english_to_russian[callback.data.split()[1]]}.'
                            f'Их больше на нашем сайте: https://tsarskiykrolik.com/',
                            reply_markup=client_keyboard_breeds)
 
 
 async def back(callback: types.CallbackQuery):
     """Send prev. inline keyboard"""
+
     await bot.send_message(callback.from_user.id, KEYBOARD_LEVELS[current_keyboard_level - 1][1], reply_markup=KEYBOARD_LEVELS[current_keyboard_level - 1][0])
 
 
