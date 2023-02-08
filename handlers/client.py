@@ -9,6 +9,20 @@ from keyboards.client_kb import client_keyboard_breeds
 from Parser_class import Parser
 
 
+current_keyboard_level = 0
+#
+KEYBOARD_LEVELS = {
+    0: (client_keyboard_start, 'Я кролик-бот. Меня зовут Крош. Я реагирую только на определенные команды, прям как настоящий кролик'),
+    1: (client_keyboard_commands, 'Вот что я умею'),
+    2: (client_keyboard_breeds, 'Нас много, но все мы разные')
+}
+#
+# KEYBOARD_LEVELS = {
+#     0: empty,
+#
+# }
+
+
 async def empty(message: types.Message):
     """An empty handler does not work on commands"""
     await bot.send_message(message.from_user.id,
@@ -18,7 +32,10 @@ async def empty(message: types.Message):
 
 
 async def show_commands(callback: types.CallbackQuery):
-    """Send inline keayboard command"""
+    """Send inline keyboard command"""
+    global current_keyboard_level
+    current_keyboard_level = 1
+
     await bot.send_message(callback.from_user.id, 'Вот что я умею', reply_markup=client_keyboard_commands)
     await callback.answer()
 
@@ -45,12 +62,16 @@ async def send_email_address(callback: types.CallbackQuery):
 
 async def show_catalog(callback: types.CallbackQuery):
     """Send inline keyboard with breeds of the rabbits"""
+    global current_keyboard_level
+    current_keyboard_level = 2
+
     await bot.send_message(callback.from_user.id,
                            'Нас много, но все мы разные',
                            reply_markup=client_keyboard_breeds)
 
 
 async def show_picked_breed(callback: types.CallbackQuery):
+    """Send inline keyboard with breeds of rabbits"""
     data = Parser().parse(callback.data.split()[1])
 
     for i in data:
@@ -68,6 +89,15 @@ async def show_picked_breed(callback: types.CallbackQuery):
                                  f'🔬Подробнее🔬: {i.more_info}',
                                  parse_mode='html')
     await callback.answer()
+    await bot.send_message(callback.from_user.id,
+                           f'Это большинство кроликов породы {callback.data.split()[1]}.'
+                           f'Их больше на нашем сайте: https://tsarskiykrolik.com/',
+                           reply_markup=client_keyboard_breeds)
+
+
+async def back(callback: types.CallbackQuery):
+    """Send prev. inline keyboard"""
+    await bot.send_message(callback.from_user.id, KEYBOARD_LEVELS[current_keyboard_level - 1][1], reply_markup=KEYBOARD_LEVELS[current_keyboard_level - 1][0])
 
 
 def register_handlers_client(dp: Dispatcher):
@@ -78,4 +108,5 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_callback_query_handler(send_email_address, Text(startswith=('email')))
     dp.register_callback_query_handler(show_catalog, Text(startswith=('catalog')))
     dp.register_callback_query_handler(show_picked_breed, Text(startswith=('breed')))
+    dp.register_callback_query_handler(back, Text(startswith=('back')))
     dp.register_message_handler(empty)

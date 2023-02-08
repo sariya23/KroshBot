@@ -1,12 +1,14 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+button_back = InlineKeyboardButton('Назад', callback_data='back')
+
 # Start inline
 button_show_commands = InlineKeyboardButton('Я ОБУЧЕН КОМАНДАМ(тыкни)', callback_data='show_commands')
 
 client_keyboard_start = InlineKeyboardMarkup()
 client_keyboard_start.add(button_show_commands)
 
-# Commands
+# Main Commands(menu)
 button_location = InlineKeyboardButton('Локация остальных кроликов', callback_data='location')
 button_phone_number = InlineKeyboardButton('Номер телефона', callback_data='phone_number')
 button_email = InlineKeyboardButton('Электронная почта', callback_data='email')
@@ -14,6 +16,8 @@ button_catalog = InlineKeyboardButton('Выбрать кролика', callback_
 
 client_keyboard_commands = InlineKeyboardMarkup(row_width=1)
 client_keyboard_commands.add(button_location, button_phone_number, button_email, button_catalog)
+client_keyboard_commands.add(button_back)
+
 
 # Breeds
 button_belichij = InlineKeyboardButton('Беличий карлик', callback_data='breed belichij')
@@ -31,3 +35,4 @@ client_keyboard_breeds.add(button_belichij, button_germelin, button_xotot)
 client_keyboard_breeds.add(button_minor, button_minilop, button_niderlandskij)
 client_keyboard_breeds.add(button_karlikovyj_baran, button_cvetnoj_karlik)
 client_keyboard_breeds.add(button_url)
+client_keyboard_breeds.add(button_back)
