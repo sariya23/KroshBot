@@ -18,7 +18,15 @@ async def show_commands(callback: types.CallbackQuery):
     await callback.answer()
 
 
+async def send_address_shop(callback: types.CallbackQuery):
+    """Send address of the shop"""
+    await bot.send_message(callback.from_user.id, 'Мы с братьями и сестрами тусуемся здесь:\n'
+                                                  'Московская область Деревня Тарычево, ул. Яблоневая 7-В')
+    await callback.answer()
+
+
 def register_handlers_client(dp: Dispatcher):
     """The function registers handlers"""
     dp.register_message_handler(empty)
     dp.register_callback_query_handler(show_commands, Text(startswith=('show_commands')))
+    dp.register_callback_query_handler(send_address_shop, Text(startswith=('location')))
