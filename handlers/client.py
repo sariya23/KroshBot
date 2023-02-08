@@ -1,5 +1,5 @@
 from aiogram import types, Dispatcher
-from create_bot import bot, dp
+from create_bot import bot
 from keyboards.client_kb import client_keyboard_start
 from keyboards.client_kb import client_keyboard_commands
 from aiogram.dispatcher.filters import Text
@@ -8,7 +8,8 @@ from aiogram.dispatcher.filters import Text
 async def empty(message: types.Message):
     """An empty handler does not work on commands"""
     await bot.send_message(message.from_user.id,
-                           f'Я кролик-бот. Меня зовут Крош. Я реагирую только на определенные команды, прям как настоящий кролик',
+                           f'Я кролик-бот. Меня зовут Крош. '
+                           f'Я реагирую только на определенные команды, прям как настоящий кролик',
                            reply_markup=client_keyboard_start)
 
 
@@ -33,6 +34,7 @@ async def send_phone_number(callback: types.CallbackQuery):
 
 
 async def send_email(callback: types.CallbackQuery):
+    """Send email"""
     await bot.send_message(callback.from_user.id, 'Пиши сюда:\ntsarskiy_krolik@mail.ru')
     await callback.answer()
 
