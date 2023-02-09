@@ -2,22 +2,21 @@ from aiogram import types, Dispatcher
 from create_bot import bot
 from aiogram.dispatcher.filters import Text
 
-from keyboards.client_kb import client_keyboard_start
-from keyboards.client_kb import client_keyboard_commands
-from keyboards.client_kb import client_keyboard_breeds
+from keyboards.inline.inline_breeds import client_keyboard_breeds
+from keyboards.inline.inline_commands import client_keyboard_commands
 
 from Parser_class import Parser
 
 
-current_keyboard_level = 0
-
-STACK = []
-
-KEYBOARD_LEVELS = {
-    0: (client_keyboard_start, 'Я кролик-бот. Меня зовут Крош. Я реагирую только на определенные команды, прям как настоящий кролик'),
-    1: (client_keyboard_commands, 'Вот что я умею'),
-    2: (client_keyboard_breeds, 'Нас много, но все мы разные')
-}
+# current_keyboard_level = 0
+#
+# STACK = []
+#
+# KEYBOARD_LEVELS = {
+#     # 0: (client_keyboard_start, 'Я кролик-бот. Меня зовут Крош. Я реагирую только на определенные команды, прям как настоящий кролик'),
+#     # 1: (client_keyboard_commands, 'Вот что я умею'),
+#     2: (client_keyboard_breeds, 'Нас много, но все мы разные')
+# }
 
 english_to_russian = {
     'belichij': 'Беличий карлик',
@@ -34,20 +33,16 @@ english_to_russian = {
 async def empty(message: types.Message):
     """An empty handler does not work on commands"""
     await bot.send_message(message.from_user.id,
-                           f'Я кролик-бот. Меня зовут Крош. '
-                           f'Я реагирую только на определенные команды, прям как настоящий кролик',
-                           reply_markup=client_keyboard_start)
+                           f'Неизвестная команда(. Чтобы увидеть мои возможности '
+                           f'пропиши /start',)
 
 
-async def show_commands(callback: types.CallbackQuery):
-    """Send inline keyboard command"""
-    global current_keyboard_level
-    current_keyboard_level = 1
-    
-    STACK.append(callback.message)
-    
-    await bot.send_message(callback.from_user.id, 'Вот что я умею', reply_markup=client_keyboard_commands)
-    await callback.answer()
+async def command_start(callback: types.CallbackQuery):
+    """Triggers by command /start
+    Send inline keyboards with commands"""
+    await bot.send_message(callback.from_user.id,
+                           f'Вот что я умею',
+                           reply_markup=client_keyboard_commands)
 
 
 async def send_address_shop(callback: types.CallbackQuery):
@@ -72,11 +67,6 @@ async def send_email_address(callback: types.CallbackQuery):
 
 async def show_catalog(callback: types.CallbackQuery):
     """Send inline keyboard with breeds of the rabbits"""
-    global current_keyboard_level
-    current_keyboard_level = 2
-
-    STACK.append(callback.message)
-
     await bot.send_message(callback.from_user.id,
                            'Нас много, но все мы разные',
                            reply_markup=client_keyboard_breeds)
@@ -108,19 +98,12 @@ async def show_picked_breed(callback: types.CallbackQuery):
                            reply_markup=client_keyboard_breeds)
 
 
-async def back(callback: types.CallbackQuery):
-    """Send prev. inline keyboard"""
-    await STACK[-1].delete()
-    await bot.send_message(callback.from_user.id, KEYBOARD_LEVELS[current_keyboard_level - 1][1], reply_markup=KEYBOARD_LEVELS[current_keyboard_level - 1][0])
-
-
-def register_handlers_client(dp: Dispatcher):
+def register_inline_handlers_client(dp: Dispatcher):
     """The function registers handlers"""
-    dp.register_callback_query_handler(show_commands, Text(startswith=('show')))
+    dp.register_callback_query_handler(command_start, Text(startswith=('show_commands')))
     dp.register_callback_query_handler(send_address_shop, Text(startswith=('location')))
     dp.register_callback_query_handler(send_phone_number, Text(startswith=('phone_number')))
     dp.register_callback_query_handler(send_email_address, Text(startswith=('email')))
     dp.register_callback_query_handler(show_catalog, Text(startswith=('catalog')))
     dp.register_callback_query_handler(show_picked_breed, Text(startswith=('breed')))
-    dp.register_callback_query_handler(back, Text(startswith=('back')))
     dp.register_message_handler(empty)
