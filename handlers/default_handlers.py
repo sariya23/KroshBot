@@ -18,6 +18,13 @@ async def commands(message: types.Message):
                            reply_markup=client_keyboard_commands)
 
 
+async def phone(message: types.Message):
+    await bot.send_message(message.from_user.id,
+                           'Звони сюда: \n'
+                           '+79252215934')
+
+
 def register_default_handlers(dp: Dispatcher):
     dp.register_message_handler(start, commands=('start'))
     dp.register_message_handler(commands, commands=('commands'))
+    dp.register_message_handler(phone, commands=('phone'))
