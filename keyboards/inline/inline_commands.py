@@ -8,4 +8,3 @@ button_catalog = InlineKeyboardButton('Выбрать кролика', callback_
 
 client_keyboard_commands = InlineKeyboardMarkup(row_width=1)
 client_keyboard_commands.add(button_location, button_phone_number, button_email, button_catalog)
-# client_keyboard_commands.add(button_back)
