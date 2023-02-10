@@ -68,7 +68,7 @@ async def show_catalog(callback: types.CallbackQuery):
 async def show_picked_breed(callback: types.CallbackQuery):
     """Send inline keyboard with breeds of rabbits"""
     url = Parser.get_url(callback.data.split()[1])
-    data = Parser().parse(url)
+    data = Parser().parse(callback.data.split()[1])
 
     for i in data:
         if not i.discount_price:

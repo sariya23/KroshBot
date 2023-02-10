@@ -71,18 +71,7 @@ class Parser:
     @staticmethod
     def get_url(breed: str) -> str:
         """Takes breed of the rabbit and returns url of them"""
-        breeds = {
-            'belichij': 'belichij',
-            'germelin': 'germelin',
-            'karlikovyj-baran': 'karlikovyj-baran',
-            'minor': 'minor',
-            'minilop': 'minilop',
-            'niderlandskij': 'niderlandskij',
-            'xotot': 'xotot',
-            'cvetnoj-karlik': 'cvetnoj-karlik'
-        }
-
-        return f'https://tsarskiykrolik.com/product-category/kroliki/?filter_poroda={breeds[breed]}'
+        return f'https://tsarskiykrolik.com/product-category/kroliki/?filter_poroda={breed}'
 
     def parse(self, breed: str) -> list[namedtuple]:
         """Takes breed from user(inline-button) and parse info about it from site.
