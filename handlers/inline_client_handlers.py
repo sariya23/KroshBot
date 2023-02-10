@@ -39,21 +39,23 @@ async def command_start(callback: types.CallbackQuery):
 
 async def send_address_shop(callback: types.CallbackQuery):
     """Send address of the shop"""
-    await bot.send_message(callback.from_user.id, 'Мы с братьями и сестрами тусуемся здесь:\n'
-                                                  'Московская область Деревня Тарычево, ул. Яблоневая 7-В')
+    await bot.send_message(callback.from_user.id,
+                           '📌Мы с братьями и сестрами тусуемся здесь:\n'
+                           '<b>Московская область Деревня Тарычево, ул. Яблоневая 7-В</b>',
+                           parse_mode='HTML')
     await callback.answer()
 
 
 async def send_phone_number(callback: types.CallbackQuery):
     """Send phone number"""
-    await bot.send_message(callback.from_user.id, 'Звони сюда:\n'
+    await bot.send_message(callback.from_user.id, '☎Звони сюда:\n'
                                                   '+79252215934')
     await callback.answer()
 
 
 async def send_email_address(callback: types.CallbackQuery):
     """Send email address"""
-    await bot.send_message(callback.from_user.id, 'Пиши сюда:\ntsarskiy_krolik@mail.ru')
+    await bot.send_message(callback.from_user.id, '📮Пиши сюда:\ntsarskiy_krolik@mail.ru')
     await callback.answer()
 
 
