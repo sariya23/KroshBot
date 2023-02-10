@@ -24,7 +24,7 @@ async def empty(message: types.Message):
     """An empty handler does not work on commands"""
     await bot.send_message(message.from_user.id,
                            f'Неизвестная команда(. Чтобы увидеть мои возможности '
-                           f'пропиши /start',)
+                           f'пропиши /commands',)
 
 
 async def command_start(callback: types.CallbackQuery):
