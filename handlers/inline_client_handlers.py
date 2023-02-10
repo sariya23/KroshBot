@@ -31,8 +31,9 @@ async def command_start(callback: types.CallbackQuery):
     """Triggers by command /start
     Send inline keyboards with commands"""
     await bot.send_message(callback.from_user.id,
-                           f'Вот что я умею',
-                           reply_markup=client_keyboard_commands)
+                           f'Меня запрограммировали на следующие команды:',
+                           reply_markup=client_keyboard_commands,
+                           parse_mode='HTML')
     await callback.answer()
 
 
@@ -84,9 +85,10 @@ async def show_picked_breed(callback: types.CallbackQuery):
                                  parse_mode='html')
     await callback.answer()
     await bot.send_message(callback.from_user.id,
-                           f'Это большинство кроликов породы {english_to_russian[callback.data.split()[1]]}.'
+                           f'Это большинство кроликов породы <b>{english_to_russian[callback.data.split()[1]]}</b>.\n'
                            f'Со всеми можешь ознакомиться на нашем сайте: https://tsarskiykrolik.com/',
-                           reply_markup=client_keyboard_breeds)
+                           reply_markup=client_keyboard_breeds,
+                           parse_mode='HTML')
 
 
 def register_inline_handlers_client(dp: Dispatcher):

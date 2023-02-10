@@ -8,9 +8,13 @@ from keyboards.inline.inline_breeds import client_keyboard_breeds
 async def start(message: types.Message):
     """Triggers by command /start"""
     await bot.send_message(message.from_user.id,
-                           'Я кролик-бот. Меня зовут Крош. Я реагирую только'
-                           ' на определенные команды.',
-                           reply_markup=client_keyboard_start)
+                           f'Привет 👋, <b>{message.from_user.first_name}</b>\n\n'
+                           f'Я <b>Кролик</b>🐰, который живет внутри Телеграма 😀\n'
+                           f'К сожалению, кролики в реальной жизни не разговаривают, '
+                           f'но все понимают. Я буду их общим голосом\n\n'
+                           f'Я помогу тебе, чем смогу☺.',
+                           reply_markup=client_keyboard_start,
+                           parse_mode='HTML')
 
 
 async def help_(message: types.Message):

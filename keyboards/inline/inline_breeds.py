@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 button_back = InlineKeyboardButton('Назад', callback_data='back')
 
 
-button_belichij = InlineKeyboardButton('🐇Беличий карлик🐇', callback_data='breed belichij')
+button_belichij = InlineKeyboardButton('🐇Беличий\nкарлик🐇', callback_data='breed belichij')
 button_germelin = InlineKeyboardButton('🐇Гермелин🐇', callback_data='breed germelin')
 button_karlikovyj_baran = InlineKeyboardButton('🐇Карликовый\nбаран🐇', callback_data='breed karlikovyj-baran')
 button_minor = InlineKeyboardButton('🐇Менор🐇', callback_data='breed minor')
