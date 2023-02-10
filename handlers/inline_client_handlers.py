@@ -8,16 +8,6 @@ from keyboards.inline.inline_commands import client_keyboard_commands
 from Parser_class import Parser
 
 
-# current_keyboard_level = 0
-#
-# STACK = []
-#
-# KEYBOARD_LEVELS = {
-#     # 0: (client_keyboard_start, 'Я кролик-бот. Меня зовут Крош. Я реагирую только на определенные команды, прям как настоящий кролик'),
-#     # 1: (client_keyboard_commands, 'Вот что я умею'),
-#     2: (client_keyboard_breeds, 'Нас много, но все мы разные')
-# }
-
 english_to_russian = {
     'belichij': 'Беличий карлик',
     'germelin': 'Гермелин',
