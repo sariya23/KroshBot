@@ -43,6 +43,7 @@ async def command_start(callback: types.CallbackQuery):
     await bot.send_message(callback.from_user.id,
                            f'Вот что я умею',
                            reply_markup=client_keyboard_commands)
+    await callback.answer()
 
 
 async def send_address_shop(callback: types.CallbackQuery):
