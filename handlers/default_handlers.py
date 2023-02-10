@@ -32,19 +32,6 @@ async def commands(message: types.Message):
                            reply_markup=client_keyboard_commands)
 
 
-async def phone(message: types.Message):
-    """Triggers by command /phone"""
-    await bot.send_message(message.from_user.id,
-                           'Звони сюда: \n'
-                           '+79252215934')
-
-
-async def email(message: types.Message):
-    """Triggers by command /email"""
-    await bot.send_message(message.from_user.id,
-                           'Пиши сюда:\ntsarskiy_krolik@mail.ru')
-
-
 async def rabbits_breeds(message: types.Message):
     """Triggers by command /rabbits"""
     await bot.send_message(message.from_user.id,
@@ -56,6 +43,4 @@ def register_default_handlers(dp: Dispatcher):
     dp.register_message_handler(start, commands=('start'))
     dp.register_message_handler(help_, commands=('help'))
     dp.register_message_handler(commands, commands=('commands'))
-    dp.register_message_handler(phone, commands=('phone'))
-    dp.register_message_handler(email, commands=('email'))
     dp.register_message_handler(rabbits_breeds, commands=('rabbits'))

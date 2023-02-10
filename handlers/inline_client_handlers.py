@@ -85,7 +85,7 @@ async def show_picked_breed(callback: types.CallbackQuery):
     await callback.answer()
     await bot.send_message(callback.from_user.id,
                            f'Это большинство кроликов породы {english_to_russian[callback.data.split()[1]]}.'
-                           f'Их больше на нашем сайте: https://tsarskiykrolik.com/',
+                           f'Со всеми можешь ознакомиться на нашем сайте: https://tsarskiykrolik.com/',
                            reply_markup=client_keyboard_breeds)
 
 
