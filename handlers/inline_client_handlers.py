@@ -67,7 +67,8 @@ async def show_catalog(callback: types.CallbackQuery):
 
 async def show_picked_breed(callback: types.CallbackQuery):
     """Send inline keyboard with breeds of rabbits"""
-    data = Parser().parse(callback.data.split()[1])
+    url = Parser.get_url(callback.data.split()[1])
+    data = Parser().parse(url)
 
     for i in data:
         if not i.discount_price:
@@ -86,7 +87,7 @@ async def show_picked_breed(callback: types.CallbackQuery):
     await callback.answer()
     await bot.send_message(callback.from_user.id,
                            f'Это большинство кроликов породы <b>{english_to_russian[callback.data.split()[1]]}</b>.\n'
-                           f'Со всеми можешь ознакомиться на нашем сайте: https://tsarskiykrolik.com/',
+                           f'Со всеми можешь ознакомиться на нашем сайте: {url}',
                            reply_markup=client_keyboard_breeds,
                            parse_mode='HTML')
 

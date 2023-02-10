@@ -68,10 +68,9 @@ class Parser:
         else:
             return f'{time_end[0]} {self.convert_days_to_word(time_end[0])} и {time_end[1]} {self.convert_hours_to_word(time_end[1])}'
 
-    def parse(self, breed: str) -> list[namedtuple]:
-        """Takes breed from user(inline-button) and parse info about it from site.
-        The Exception is raised if no discount in block"""
-
+    @staticmethod
+    def get_url(breed: str) -> str:
+        """Takes breed of the rabbit and returns url of them"""
         breeds = {
             'belichij': 'belichij',
             'germelin': 'germelin',
@@ -83,8 +82,13 @@ class Parser:
             'cvetnoj-karlik': 'cvetnoj-karlik'
         }
 
-        URL = f'https://tsarskiykrolik.com/product-category/kroliki/?filter_poroda={breeds[breed]}'
-        page = requests.get(URL)
+        return f'https://tsarskiykrolik.com/product-category/kroliki/?filter_poroda={breeds[breed]}'
+
+    def parse(self, breed: str) -> list[namedtuple]:
+        """Takes breed from user(inline-button) and parse info about it from site.
+        The Exception is raised if no discount in block"""
+        url = self.get_url(breed)
+        page = requests.get(url)
         soup = BeautifulSoup(page.text, 'html.parser')
         products = soup.find_all('div', class_='product-wrapper')
         res = []
