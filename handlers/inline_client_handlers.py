@@ -74,6 +74,7 @@ async def show_catalog(callback: types.CallbackQuery):
 
 
 async def next_call(call: types.CallbackQuery):
+    i = int(call.data.split()[1])
     breed = call.data.split()[2]
     data = Parser().parse(breed)[int(call.data.split()[1])]
 
@@ -92,7 +93,7 @@ async def next_call(call: types.CallbackQuery):
 
             chat_id=call.message.chat.id,
             message_id=call.message.message_id,
-            reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next', callback_data=f'next 2 {breed}'))
+            reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed}'))
         )
     else:
         await bot.edit_message_caption(
@@ -102,7 +103,7 @@ async def next_call(call: types.CallbackQuery):
                     f'🔬Подробнее🔬: {data.more_info}',
             chat_id=call.message.chat.id,
             message_id=call.message.message_id,
-            reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next1', callback_data=f'next 2 {breed}'))
+            reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next1', callback_data=f'next {i + 1} {breed}'))
         )
     await call.answer()
 
