@@ -77,7 +77,7 @@ async def next_call(call: types.CallbackQuery):
     amount_rabbits = int(call.data.split()[3])  # amount rabbits to the end of the list
     i = int(call.data.split()[1])  # pos of the current rabbit in th list
     breed = call.data.split()[2]  # current breed
-    data = Parser().parse(breed)[int(call.data.split()[1])]
+    data = Parser().parse(breed)[i]
 
     await bot.edit_message_media(
         chat_id=call.message.chat.id,
@@ -110,7 +110,7 @@ async def next_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().add(
-                    InlineKeyboardButton('back', callback_data=f'back {i + 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
                     InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
                 parse_mode='HTML'
             )
@@ -143,8 +143,72 @@ async def next_call(call: types.CallbackQuery):
         await call.answer()
 
 
-async def call_back(call: types.CallbackQuery):
+async def back_call(call: types.CallbackQuery):
     _, i, breed, amount_rabbits = call.data.split()
+    i = int(i)
+    amount_rabbits = int(amount_rabbits)
+    data = Parser().parse(breed)[i]
+
+    await bot.edit_message_media(
+        chat_id=call.message.chat.id,
+        message_id=call.message.message_id,
+        media=InputMediaPhoto(media=data.img_url)
+
+    )
+
+    if i == 0:
+        if not data.discount_price:
+            await bot.edit_message_caption(
+                caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
+                        f'💵Стоимость счастья💵: {data.old_price}\n'
+                        f'🔬Подробнее🔬: {data.more_info}',
+
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=InlineKeyboardMarkup().insert(
+                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                parse_mode='HTML'
+            )
+        else:
+            await bot.edit_message_caption(
+                caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
+                        f'💵Стоимость по скидке💵: {data.discount_price}\n'
+                        f'<b>⌛СКИДКА ПРОДЛИТСЯ ЕЩЕ⌛</b>: {data.time_to_disc_end}\n'
+                        f'🔬Подробнее🔬: {data.more_info}',
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=InlineKeyboardMarkup().insert(
+                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                parse_mode='HTML'
+            )
+    else:
+        if not data.discount_price:
+            await bot.edit_message_caption(
+                caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
+                        f'💵Стоимость счастья💵: {data.old_price}\n'
+                        f'🔬Подробнее🔬: {data.more_info}',
+
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=InlineKeyboardMarkup().add(
+                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                parse_mode='HTML'
+            )
+        else:
+            await bot.edit_message_caption(
+                caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
+                        f'💵Стоимость по скидке💵: {data.discount_price}\n'
+                        f'<b>⌛СКИДКА ПРОДЛИТСЯ ЕЩЕ⌛</b>: {data.time_to_disc_end}\n'
+                        f'🔬Подробнее🔬: {data.more_info}',
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=InlineKeyboardMarkup().add(
+                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                parse_mode='HTML'
+            )
+    await call.answer()
 
 
 async def show_picked_breed(call: types.CallbackQuery):
@@ -185,6 +249,7 @@ async def show_picked_breed(call: types.CallbackQuery):
                              )
     await call.answer()
 
+
 def register_inline_handlers_client(dp: Dispatcher):
     """The function registers handlers"""
     dp.register_callback_query_handler(command_start, Text(startswith=('show_commands')))
@@ -194,4 +259,5 @@ def register_inline_handlers_client(dp: Dispatcher):
     dp.register_callback_query_handler(show_catalog, Text(startswith=('catalog')))
     dp.register_callback_query_handler(show_picked_breed, Text(startswith=('breed')))
     dp.register_callback_query_handler(next_call, Text(startswith=('next')))
+    dp.register_callback_query_handler(back_call, Text(startswith=('back')))
     dp.register_message_handler(empty)
