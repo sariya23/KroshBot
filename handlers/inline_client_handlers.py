@@ -96,8 +96,8 @@ async def next_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().add(
-                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
-                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                    InlineKeyboardButton('Предыдущий ◀', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('Следующий ▶', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
                 parse_mode='HTML'
             )
 
@@ -110,8 +110,8 @@ async def next_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().add(
-                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
-                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                    InlineKeyboardButton('Предыдущий ◀', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('Следующий ▶', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
                 parse_mode='HTML'
             )
 
@@ -125,7 +125,7 @@ async def next_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().add(
-                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')),
+                    InlineKeyboardButton('Предыдущий ◀', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')),
                 parse_mode='HTML'
             )
         else:
@@ -137,7 +137,7 @@ async def next_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().add(
-                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')),
+                    InlineKeyboardButton('Предыдущий ◀', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')),
                 parse_mode='HTML'
             )
         await call.answer()
@@ -166,7 +166,7 @@ async def back_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().insert(
-                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                    InlineKeyboardButton('Следующий ▶', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
                 parse_mode='HTML'
             )
         else:
@@ -178,7 +178,7 @@ async def back_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().insert(
-                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                    InlineKeyboardButton('Следующий ▶', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
                 parse_mode='HTML'
             )
     else:
@@ -191,8 +191,8 @@ async def back_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().add(
-                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
-                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                    InlineKeyboardButton('Предыдущий ◀', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('Следующий ▶', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
                 parse_mode='HTML'
             )
         else:
@@ -204,8 +204,8 @@ async def back_call(call: types.CallbackQuery):
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=InlineKeyboardMarkup().add(
-                    InlineKeyboardButton('back', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
-                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                    InlineKeyboardButton('Предыдущий ◀', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('Следующий ▶', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
                 parse_mode='HTML'
             )
     await call.answer()
@@ -230,7 +230,7 @@ async def show_picked_breed(call: types.CallbackQuery):
                              f'🔬Подробнее🔬: {data[0].more_info}',
                              parse_mode='html',
                              reply_markup=InlineKeyboardMarkup().add(
-                                 InlineKeyboardButton('next',
+                                 InlineKeyboardButton('Следующий ▶',
                                                       callback_data=f'next 1 {breed} {amount_rabbits - 1}'))
                              )
         print(call.data.split())
@@ -244,7 +244,7 @@ async def show_picked_breed(call: types.CallbackQuery):
                              f'🔬Подробнее🔬: {data[0].more_info}',
                              parse_mode='html',
                              reply_markup=InlineKeyboardMarkup().add(
-                                 InlineKeyboardButton('next',
+                                 InlineKeyboardButton('Следующий ▶',
                                                       callback_data=f'next 1 {breed} {amount_rabbits - 1}'))
                              )
     await call.answer()
