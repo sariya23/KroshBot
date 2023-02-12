@@ -74,6 +74,8 @@ async def show_catalog(callback: types.CallbackQuery):
 
 
 async def next_call(call: types.CallbackQuery):
+    amount_rabbits = int(call.data.split()[3])
+    print(amount_rabbits)
     i = int(call.data.split()[1])
     breed = call.data.split()[2]
     data = Parser().parse(breed)[int(call.data.split()[1])]
@@ -85,27 +87,61 @@ async def next_call(call: types.CallbackQuery):
 
     )
 
-    if not data.discount_price:
-        await bot.edit_message_caption(
-            caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
-                    f'💵Стоимость счастья💵: {data.old_price}\n'
-                    f'🔬Подробнее🔬: {data.more_info}',
+    if amount_rabbits > 1:
+        if not data.discount_price:
+            await bot.edit_message_caption(
+                caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
+                        f'💵Стоимость счастья💵: {data.old_price}\n'
+                        f'🔬Подробнее🔬: {data.more_info}',
 
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed}'))
-        )
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=InlineKeyboardMarkup().add(
+                    InlineKeyboardButton('back', callback_data=f'back {i + 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                parse_mode='HTML'
+            )
+
+        else:
+            await bot.edit_message_caption(
+                caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
+                        f'💵Стоимость по скидке💵: {data.discount_price}\n'
+                        f'<b>⌛СКИДКА ПРОДЛИТСЯ ЕЩЕ⌛</b>: {data.time_to_disc_end}\n'
+                        f'🔬Подробнее🔬: {data.more_info}',
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=InlineKeyboardMarkup().add(
+                    InlineKeyboardButton('back', callback_data=f'back {i + 1} {breed} {amount_rabbits + 1}')).insert(
+                    InlineKeyboardButton('next', callback_data=f'next {i + 1} {breed} {amount_rabbits - 1}')),
+                parse_mode='HTML'
+            )
+
     else:
-        await bot.edit_message_caption(
-            caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
-                    f'💵Стоимость по скидке💵: {data.discount_price}\n'
-                    f'<b>⌛СКИДКА ПРОДЛИТСЯ ЕЩЕ⌛</b>: {data.time_to_disc_end}\n'
-                    f'🔬Подробнее🔬: {data.more_info}',
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next1', callback_data=f'next {i + 1} {breed}'))
-        )
-    await call.answer()
+        if not data.discount_price:
+            await bot.edit_message_caption(
+                caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
+                        f'💵Стоимость счастья💵: {data.old_price}\n'
+                        f'🔬Подробнее🔬: {data.more_info}',
+
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=InlineKeyboardMarkup().add(
+                    InlineKeyboardButton('back', callback_data=f'back {i + 1} {breed} {amount_rabbits + 1}')),
+                parse_mode='HTML'
+            )
+        else:
+            await bot.edit_message_caption(
+                caption=f'🐇Пушистик породы🐇: <b>{data.breed}</b>\n'
+                        f'💵Стоимость по скидке💵: {data.discount_price}\n'
+                        f'<b>⌛СКИДКА ПРОДЛИТСЯ ЕЩЕ⌛</b>: {data.time_to_disc_end}\n'
+                        f'🔬Подробнее🔬: {data.more_info}',
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=InlineKeyboardMarkup().add(
+                    InlineKeyboardButton('back', callback_data=f'back {i + 1} {breed} {amount_rabbits + 1}')),
+                parse_mode='HTML'
+            )
+        await call.answer()
 
 
 async def show_picked_breed(call: types.CallbackQuery):
@@ -113,6 +149,7 @@ async def show_picked_breed(call: types.CallbackQuery):
     breed = call.data.split()[1]
     url = Parser.get_url(breed)
     data = Parser().parse(breed)
+    amount_rabbits = len(data)
 
     if not data[0].discount_price:
         await bot.send_photo(call.from_user.id, data[0].img_url,
@@ -121,7 +158,8 @@ async def show_picked_breed(call: types.CallbackQuery):
                              f'🔬Подробнее🔬: {data[0].more_info}',
                              parse_mode='html',
                              reply_markup=InlineKeyboardMarkup().add(
-                                 InlineKeyboardButton('next', callback_data=f'next 1 {breed}'))
+                                 InlineKeyboardButton('next',
+                                                      callback_data=f'next 1 {breed} {amount_rabbits - 1}'))
                              )
         print(call.data.split())
         await call.answer()
@@ -134,66 +172,65 @@ async def show_picked_breed(call: types.CallbackQuery):
                              f'🔬Подробнее🔬: {data[0].more_info}',
                              parse_mode='html',
                              reply_markup=InlineKeyboardMarkup().add(
-                                 InlineKeyboardButton('next', callback_data=f'next 1 {breed}'))
+                                 InlineKeyboardButton('next',
+                                                      callback_data=f'next 1 {breed} {amount_rabbits - 1}'))
                              )
-        await call.answer()
-    # else:
-    #     print(i)
+    await call.answer()
+            # else:
+            #     print(i)
+            #     await bot.edit_message_media(
+            #         chat_id=call.message.chat.id,
+            #         message_id=call.message.message_id,
+            #         media=InputMediaPhoto(media=data.img_url)
+            #
+            #     )
+            #     i += 1
+            #     await call.answer()
+
+            #
+            # for i in data:
+            #     if not i.discount_price:
+            #         await bot.send_photo(callback.from_user.id, i.img_url,
+            #                              f'🐇Пушистик породы🐇: <b>{i.breed}</b>\n'
+            #                              f'💵Стоимость счастья💵: {i.old_price}\n'
+            #                              f'🔬Подробнее🔬: {i.more_info}',
+            #                              parse_mode='html')
+            #     else:
+            #         await bot.send_photo(callback.from_user.id, i.img_url,
+            #                              f'🐇Пушистик породы🐇: <b>{i.breed}</b>\n'
+            #                              f'💵Стоимость по скидке💵: {i.discount_price}\n'
+            #                              f'<b>⌛СКИДКА ПРОДЛИТСЯ ЕЩЕ⌛</b>: {i.time_to_disc_end}\n'
+            #                              f'🔬Подробнее🔬: {i.more_info}',
+            #                              parse_mode='html')
+            # await callback.answer()
+            # await bot.send_message(callback.from_user.id,
+            #                        f'Это большинство кроликов породы <b>{english_to_russian[callback.data.split()[1]]}</b>.\n'
+            #                        f'Со всеми можешь ознакомиться на нашем сайте: {url}',
+            #                        reply_markup=client_keyboard_breeds,
+            #                        parse_mode='HTML')
+
+    # s = [1, 2, 3, 4, 5]
+    # p = ['https://tsarskiykrolik.com/wp-content/uploads/2022/11/rubin-600x600.jpg',
+    #      'https://i.pinimg.com/736x/28/f4/af/28f4afa16adca54153c600a0ea5f63af.jpg']
+    # i = 0
+    # # async def test_call(call: types.CallbackQuery):
+    #     global i
+    #
     #     await bot.edit_message_media(
     #         chat_id=call.message.chat.id,
     #         message_id=call.message.message_id,
-    #         media=InputMediaPhoto(media=data.img_url)
+    #         media=InputMediaPhoto(media=p[i])
     #
+    #     )
+    #
+    #     await bot.edit_message_caption(
+    #         caption=f'{s[i]}',
+    #         chat_id=call.message.chat.id,
+    #         message_id=call.message.message_id,
+    #         reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next1', callback_data='next'))
     #     )
     #     i += 1
     #     await call.answer()
-
-    #
-    # for i in data:
-    #     if not i.discount_price:
-    #         await bot.send_photo(callback.from_user.id, i.img_url,
-    #                              f'🐇Пушистик породы🐇: <b>{i.breed}</b>\n'
-    #                              f'💵Стоимость счастья💵: {i.old_price}\n'
-    #                              f'🔬Подробнее🔬: {i.more_info}',
-    #                              parse_mode='html')
-    #     else:
-    #         await bot.send_photo(callback.from_user.id, i.img_url,
-    #                              f'🐇Пушистик породы🐇: <b>{i.breed}</b>\n'
-    #                              f'💵Стоимость по скидке💵: {i.discount_price}\n'
-    #                              f'<b>⌛СКИДКА ПРОДЛИТСЯ ЕЩЕ⌛</b>: {i.time_to_disc_end}\n'
-    #                              f'🔬Подробнее🔬: {i.more_info}',
-    #                              parse_mode='html')
-    # await callback.answer()
-    # await bot.send_message(callback.from_user.id,
-    #                        f'Это большинство кроликов породы <b>{english_to_russian[callback.data.split()[1]]}</b>.\n'
-    #                        f'Со всеми можешь ознакомиться на нашем сайте: {url}',
-    #                        reply_markup=client_keyboard_breeds,
-    #                        parse_mode='HTML')
-
-
-# s = [1, 2, 3, 4, 5]
-# p = ['https://tsarskiykrolik.com/wp-content/uploads/2022/11/rubin-600x600.jpg',
-#      'https://i.pinimg.com/736x/28/f4/af/28f4afa16adca54153c600a0ea5f63af.jpg']
-# i = 0
-# # async def test_call(call: types.CallbackQuery):
-#     global i
-#
-#     await bot.edit_message_media(
-#         chat_id=call.message.chat.id,
-#         message_id=call.message.message_id,
-#         media=InputMediaPhoto(media=p[i])
-#
-#     )
-#
-#     await bot.edit_message_caption(
-#         caption=f'{s[i]}',
-#         chat_id=call.message.chat.id,
-#         message_id=call.message.message_id,
-#         reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next1', callback_data='next'))
-#     )
-#     i += 1
-#     await call.answer()
-
 
 def register_inline_handlers_client(dp: Dispatcher):
     """The function registers handlers"""
