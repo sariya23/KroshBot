@@ -107,7 +107,7 @@ class Parser:
 
             old_price = ''.join(price[:price.index('₽') + 1])
             discount_price = ''.join(price[price.index('₽') + 1:])
-            Rabbit = namedtuple('Rabit', 'breed, img_url, old_price, discount_price, time_to_disc_end, more_info')
+            Rabbit = namedtuple('Rabbit', 'breed, img_url, old_price, discount_price, time_to_disc_end, more_info')
             rabbit = Rabbit(breed, img_url, old_price, discount_price, self.format_datetime(time_to_end), more_info)
 
             res.append(rabbit)

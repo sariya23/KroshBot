@@ -1,4 +1,6 @@
 from aiogram import types, Dispatcher
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 from create_bot import bot
 from keyboards.inline.inline_start import client_keyboard_start
 from keyboards.inline.inline_commands import client_keyboard_commands
@@ -44,8 +46,18 @@ async def rabbits_breeds(message: types.Message):
                            reply_markup=client_keyboard_breeds)
 
 
+# async def test_edit(message: types.Message):
+#     await bot.send_photo(
+#         message.from_user.id,
+#         'https://avatars.mds.yandex.net/i?id=a707b920e4b006e4c9dfcd6cf9e121d79191634c-7764851-images-thumbs&n=13',
+#         'text1',
+#         reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next', callback_data='next'))
+#     )
+
+
 def register_default_handlers(dp: Dispatcher):
     dp.register_message_handler(start, commands=('start'))
     dp.register_message_handler(help_, commands=('help'))
     dp.register_message_handler(commands, commands=('commands'))
     dp.register_message_handler(rabbits_breeds, commands=('rabbits'))
+    # dp.register_message_handler(test_edit, commands=('test'))

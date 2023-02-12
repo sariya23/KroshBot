@@ -1,4 +1,6 @@
 from aiogram import types, Dispatcher
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
+
 from create_bot import bot
 from aiogram.dispatcher.filters import Text
 
@@ -6,6 +8,10 @@ from keyboards.inline.inline_breeds import client_keyboard_breeds
 from keyboards.inline.inline_commands import client_keyboard_commands
 
 from Parser_class import Parser
+
+
+class Current:
+    pass
 
 
 english_to_russian = {
@@ -24,7 +30,7 @@ async def empty(message: types.Message):
     """An empty handler does not work on commands"""
     await bot.send_message(message.from_user.id,
                            f'Неизвестная команда(. Чтобы увидеть мои возможности '
-                           f'пропиши /commands',)
+                           f'пропиши /commands', )
 
 
 async def command_start(callback: types.CallbackQuery):
@@ -67,10 +73,15 @@ async def show_catalog(callback: types.CallbackQuery):
     await callback.answer()
 
 
+
 async def show_picked_breed(callback: types.CallbackQuery):
     """Send inline keyboard with breeds of rabbits"""
-    url = Parser.get_url(callback.data.split()[1])
-    data = Parser().parse(callback.data.split()[1])
+
+    if '0' in callback.data:
+        url = Parser.get_url(callback.data.split()[1])
+        data = Parser().parse(callback.data.split()[1])
+
+
 
     for i in data:
         if not i.discount_price:
@@ -93,6 +104,29 @@ async def show_picked_breed(callback: types.CallbackQuery):
                            reply_markup=client_keyboard_breeds,
                            parse_mode='HTML')
 
+# s = [1, 2, 3, 4, 5]
+# p = ['https://tsarskiykrolik.com/wp-content/uploads/2022/11/rubin-600x600.jpg',
+#      'https://i.pinimg.com/736x/28/f4/af/28f4afa16adca54153c600a0ea5f63af.jpg']
+# i = 0
+# # async def test_call(call: types.CallbackQuery):
+#     global i
+#
+#     await bot.edit_message_media(
+#         chat_id=call.message.chat.id,
+#         message_id=call.message.message_id,
+#         media=InputMediaPhoto(media=p[i])
+#
+#     )
+#
+#     await bot.edit_message_caption(
+#         caption=f'{s[i]}',
+#         chat_id=call.message.chat.id,
+#         message_id=call.message.message_id,
+#         reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('next1', callback_data='next'))
+#     )
+#     i += 1
+#     await call.answer()
+
 
 def register_inline_handlers_client(dp: Dispatcher):
     """The function registers handlers"""
@@ -102,4 +136,5 @@ def register_inline_handlers_client(dp: Dispatcher):
     dp.register_callback_query_handler(send_email_address, Text(startswith=('email')))
     dp.register_callback_query_handler(show_catalog, Text(startswith=('catalog')))
     dp.register_callback_query_handler(show_picked_breed, Text(startswith=('breed')))
+    # dp.register_callback_query_handler(test_call, Text(startswith=('next')))
     dp.register_message_handler(empty)
