@@ -4,6 +4,7 @@ from collections import namedtuple
 
 import requests
 
+import time
 
 class Parser:
     """
@@ -117,4 +118,6 @@ class Parser:
 
 if __name__ == '__main__':
     a = Parser()
+    start = time.monotonic()
     print(*a.parse('germelin'), sep='\n')
+    print(time.monotonic() - start)

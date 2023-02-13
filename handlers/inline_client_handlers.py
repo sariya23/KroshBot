@@ -74,8 +74,10 @@ async def next_call(call: types.CallbackQuery):
     amount_rabbits = int(call.data.split()[3])  # amount rabbits to the end of the list
     i = int(call.data.split()[1])  # pos of the current rabbit in th list
     breed = call.data.split()[2]  # current breed
+    start_time = time.monotonic()
     data = Parser().parse(breed)[i]
-
+    end_time = time.monotonic()
+    print(end_time - start_time)
     is_sale = bool(data.discount_price)
     price_message = f"💵Стоимость по скидке💵: " if is_sale else "💵Стоимость счастья💵: "
     price_value = f"{data.discount_price}" if is_sale else f"{data.old_price}"
@@ -126,7 +128,6 @@ async def back_call(call: types.CallbackQuery):
     i = int(i)
     amount_rabbits = int(amount_rabbits)
     data = Parser().parse(breed)[i]
-
     is_sale = bool(data.discount_price)
     price_message = f"💵Стоимость по скидке💵: " if is_sale else "💵Стоимость счастья💵: "
     price_value = f"{data.discount_price}" if is_sale else f"{data.old_price}"
@@ -181,7 +182,10 @@ async def show_picked_breed(call: types.CallbackQuery):
     :amount_rabbits - 1 counter that count how any rabbit lost to the end"""
     breed = call.data.split()[1]
     url = Parser.get_url(breed)
+    start_time = time.monotonic()
     data = Parser().parse(breed)
+    end_time = time.monotonic()
+    print(end_time - start_time)
     amount_rabbits = len(data)
 
     is_sale = bool(data[0].discount_price)
@@ -189,18 +193,27 @@ async def show_picked_breed(call: types.CallbackQuery):
     price_value = f"{data[0].discount_price}" if is_sale else f"{data[0].old_price}"
     end_to_sale = f"<b>⌛СКИДКА ПРОДЛИТСЯ ЕЩЕ⌛</b>: {data[0].time_to_disc_end}\n" if is_sale else ""
 
-    await bot.send_photo(call.from_user.id, data[0].img_url,
-                         f'🐇Пушистик породы🐇: <b>{data[0].breed}</b>\n'
-                         f'{price_message}'
-                         f'{price_value}\n'
-                         f'{end_to_sale}'
-                         f'🔬Подробнее🔬: {data[0].more_info}',
-                         parse_mode='html',
-                         reply_markup=InlineKeyboardMarkup().add(
-                             InlineKeyboardButton('Следующий ▶',
-                                                  callback_data=f'next 1 {breed} {amount_rabbits - 1}'))
-                         )
-    await call.answer()
+    if amount_rabbits > 1:
+        await bot.send_photo(call.from_user.id, data[0].img_url,
+                             f'🐇Пушистик породы🐇: <b>{data[0].breed}</b>\n'
+                             f'{price_message}'
+                             f'{price_value}\n'
+                             f'{end_to_sale}'
+                             f'🔬Подробнее🔬: {data[0].more_info}',
+                             parse_mode='html',
+                             reply_markup=InlineKeyboardMarkup().add(
+                                 InlineKeyboardButton('Следующий ▶',
+                                                      callback_data=f'next 1 {breed} {amount_rabbits - 1}')))
+    else:
+        await bot.send_photo(call.from_user.id, data[0].img_url,
+                             f'🐇Пушистик породы🐇: <b>{data[0].breed}</b>\n'
+                             f'{price_message}'
+                             f'{price_value}\n'
+                             f'{end_to_sale}'
+                             f'🔬Подробнее🔬: {data[0].more_info}',
+                             parse_mode='html'
+                             )
+        await call.answer()
 
 
 def register_inline_handlers_client(dp: Dispatcher):
