@@ -117,7 +117,8 @@ async def next_call(call: types.CallbackQuery):
             chat_id=call.message.chat.id,
             message_id=call.message.message_id,
             reply_markup=InlineKeyboardMarkup().add(
-                InlineKeyboardButton('Предыдущий ◀', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')),
+                InlineKeyboardButton('Предыдущий ◀', callback_data=f'back {i - 1} {breed} {amount_rabbits + 1}')).add(
+                InlineKeyboardButton('🗂Вернуться к выбору породы🗂', callback_data='catalog')),
             parse_mode='HTML'
         )
         await call.answer()
@@ -211,7 +212,9 @@ async def show_picked_breed(call: types.CallbackQuery):
                              f'{price_value}\n'
                              f'{end_to_sale}'
                              f'🔬Подробнее🔬: {data[0].more_info}',
-                             parse_mode='html'
+                             parse_mode='html',
+                             reply_markup=InlineKeyboardMarkup().add(
+                                 InlineKeyboardButton('🗂Вернуться к выбору породы🗂', callback_data='catalog'))
                              )
         await call.answer()
 
